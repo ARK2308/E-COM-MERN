@@ -1,6 +1,6 @@
 const express = require("express");
 const router = new express.Router();
-const {Register, login,} = require('../../controllers/admin/adminControllers');
+const {Register, Login,} = require('../../controllers/admin/adminControllers');
 // const adminAuthcontroller = require("../../controllers/admin/adminControllers");
 const adminuploads = require("../../Multerconfig/admin/adminstorageconfig");
 
@@ -13,7 +13,7 @@ const adminuploads = require("../../Multerconfig/admin/adminstorageconfig");
 
 
 router.post("/register" ,adminuploads.single("admin_profile"), Register);
-router.post("/login" ,login);
+router.post("/login" ,Login);
 
 
 
