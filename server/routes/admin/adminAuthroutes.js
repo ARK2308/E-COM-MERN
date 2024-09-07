@@ -1,39 +1,15 @@
 const express = require("express");
 const router = new express.Router();
-const {Register, Login,} = require('../../controllers/admin/adminControllers');
-// const adminAuthcontroller = require("../../controllers/admin/adminControllers");
+const { Register, Login, AdminVerify } = require("../../controllers/admin/adminControllers");
 const adminuploads = require("../../Multerconfig/admin/adminstorageconfig");
+const adminauthenticate = require("../../Middleware/admin/adminauthenticate");
 
+// admin auth route
 
+router.post("/register", adminuploads.single("admin_profile"), Register);
+router.post("/login", Login);
 
-
-
-
-
-
-
-router.post("/register" ,adminuploads.single("admin_profile"), Register);
-router.post("/login" ,Login);
-
-
-
-
-// Example middleware function
-// const exampleMiddleware = (req, res, next) => {
-//   console.log('Middleware executed');
-//   next();
-// };
-
-// Apply middleware to all routes in the router
-// router.use(exampleMiddleware);
-
-// Admin auth routes
-// When we want to store some data in our database
-// we will use post routes
-
-
-//   // Your registration logic here
-//   res.send("Registration endpoint");
-
+// admin verify 
+router.get("/adminverify", adminauthenticate, AdminVerify)
 
 module.exports = router;
