@@ -25,6 +25,9 @@ const adminAuthroutes = require("./routes/admin/adminAuthroutes.js");
 app.use("/api", adminAuthroutes);
 
 
+// product routes
+const productroutes = require("./routes/products/productroutes.js")
+app.use("/product/api", productroutes)
 // start server 
 
 app.listen(port, ()=>{
