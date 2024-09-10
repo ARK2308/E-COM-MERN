@@ -119,3 +119,34 @@ exports.getAllProducts = async (req, res) => {
     res.status(400).json(error);
   }
 };
+
+// getsingleProduct
+exports.getSingleProduct = async(req , res) => {
+    const {productid} = req.params;
+
+    try {
+        const getSingleProductdata = await productsdb.findOne({_id:productid});
+        res.status(200).json(getSingleProductdata)
+    } catch (error) {
+        res.status(400).json(error);
+        
+    }
+};
+exports.getLatestProducts = async (req , res)=>{
+    try {
+        const getNewProducts = await productsdb.find()
+        .sort({_id:-1});
+        res.status(200).json(getNewProducts)
+    } catch (error) {
+        res.status(400).json(error);
+    }
+}
+exports.deleteProducts = async(req ,res)=>{
+    const {productid} = req.params;
+    try {
+        const deleteProducts = await productsdb.findByIdAndDelete({_id:productid});
+        res.status(200).json(deleteProducts);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+}
