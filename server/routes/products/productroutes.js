@@ -1,9 +1,16 @@
 const express = require("express");
 const adminauthenticate = require("../../Middleware/admin/adminauthenticate");
+const {addCategory , getCategory} = require("../../controllers/product/productController")
 const router = new express.Router();
-const productController = require("../../controllers/product/productController");
 
-router.post("/addcategory", adminauthenticate, productController.AddCategory);
-router.get("/getcategory",productController.GetCategory);
+
+// product category route
+router.post("/addcategory" , adminauthenticate , addCategory)
+
+// get category 
+router.get("/getcategory" , getCategory)
+
+
+
 
 module.exports = router;
