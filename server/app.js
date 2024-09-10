@@ -22,11 +22,13 @@ app.use(express.json());
 const adminAuthroutes = require("./routes/admin/adminAuthroutes.js");
 app.use("/api", adminAuthroutes);
 
-
 // product routes
-const productroutes = require("./routes/products/productroutes.js")
-app.use("/product/api" , productroutes)
+const productroutes = require("./routes/products/productroutes.js");
+app.use("/product/api", productroutes);
 
+// user routes
+const userAuthroutes = require("./routes/user/userAuthRoutes.js");
+app.use("/userauth/api", userAuthroutes);
 
 // start server
 
