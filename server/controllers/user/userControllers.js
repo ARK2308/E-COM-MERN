@@ -78,3 +78,16 @@ exports.userVerify = async (req , res) => {
         
     }
 }
+exports.userLogout = async (req , res) => {
+    try {
+        req.rootUser.tokens = req.rootUser.tokens.filter((currentElement)=>{
+            return currentElement.token !== req.token
+        });
+
+        req.rootUser.save();
+        res.status(200).json({message:"user Succesfully Logout"})
+    } catch (error) {
+        res.status(400).json(error)
+        
+    }
+}
