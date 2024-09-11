@@ -115,7 +115,7 @@ exports.forgotPassword = async (req, res) => {
     if (userfind) {
       // token generate for password change
       const token = jwt.sign({ _id: userfind._id }, SECRET_KEY, {
-        expiresIn: "120s",
+        expiresIn: "180s",
       });
 
       const setusertoken = await userDB.findByIdAndUpdate(
@@ -164,4 +164,45 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
-// urcx pqwq gzag llqv
+exports.forgotPasswordVerify = async (req , res)=>{
+    const {id,token} = req.params;
+
+    try {
+        const validuser = await userDB.findOne({_id:id,verifytoken:token});
+
+        const verifytoken = jwt.verify(token,SECRET_KEY);
+
+        if(validuser && verifytoken._id){
+            res.status(200).json({message:"Valid user"});
+        }else{
+            res.status(400).json({error:"user not exist"})
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+
+exports.resetPassword = async (req, res)=>{
+    const {id,token} = req.params;
+    const {password} = req.body;
+    try {
+        const validuser = await userDB.findOne({_id:id,verifytoken:token});
+
+        const verifytoken = jwt.verify(token,SECRET_KEY);
+
+        if(validuser && verifytoken._id){
+
+            const newpassword = await bcrypt.hash(password,12);
+
+            const setnewpassword = await userDB.findByIdAndUpdate({_id:id},{password:newpassword},{new:true})
+
+            await setnewpassword.save();
+            res.status(200).json({message:"Password sucessfully updated"});
+        }else{
+            res.status(400).json({error:"your session time out please generate newlink"})
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
