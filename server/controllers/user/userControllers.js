@@ -1,5 +1,6 @@
 const  cloudinary  = require("../../Cloudinary/cloudinary");
 const userDB = require("../../models/user/userModel");
+const bcrypt = require("bcryptjs");
 
 
 
@@ -36,5 +37,34 @@ exports.userRegister = async (req , res)=>{
     }
 }
 exports.userLogin = async (req , res)=>{
+    const {email,password} = req.body;
+    if(!email || !password){
+        res.status(400).json({error:"all field require"})
+    }
 
+    try {
+        const userValid = await userDB.findOne({email:email});
+        if(userValid){
+            const isMatch = await bcrypt.compare(password,userValid.password);
+
+            if(!isMatch){
+                res.status(400).json({error:"Invalid Details"})
+            }else{
+
+                // token generate
+                const token = await userValid.generateuserAuthToken();
+
+                const result = {
+                    userValid,
+                    token
+                }
+                res.status(200).json(result)
+            }
+        }else{
+            res.status(400).json({error:"invalid details"})
+        }
+    } catch (error) {
+        res.status(400).json(error)
+        
+    }
 }
