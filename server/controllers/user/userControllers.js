@@ -2,10 +2,11 @@ const cloudinary = require("../../Cloudinary/cloudinary");
 const userDB = require("../../models/user/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "zhfgblkSNfKGncv"
-const path = require("path")
-const fs = require("fs")
-const ejs = require("ejs")
+const SECRET_KEY = "zhfgblkSNfKGncv";
+const path = require("path");
+const fs = require("fs");
+const ejs = require("ejs");
+const { transporter } = require("../../helper");
 
 exports.userRegister = async (req, res) => {
   const { firstname, lastname, email, password, confirmpassword } = req.body;
@@ -110,20 +111,57 @@ exports.forgotPassword = async (req, res) => {
   }
 
   try {
+    const userfind = await userDB.findOne({ email: email });
+    if (userfind) {
+      // token generate for password change
+      const token = jwt.sign({ _id: userfind._id }, SECRET_KEY, {
+        expiresIn: "120s",
+      });
 
-    const userfind = await userDB.findOne({email:email});
-    if (userfind){
-        // token generate for password change
-        const token = jwt.sign({_id:userfind._id},SECRET_KEY,{
-            expiresIn:"120s"
+      const setusertoken = await userDB.findByIdAndUpdate(
+        { _id: userfind._id },
+        { verifytoken: token },
+        { new: true }
+      );
+      // join email path
+      const emailTemplatepath = path.join(
+        __dirname,
+        "../../EmailTemplate/ForgotTemplate.ejs"
+      );
+      const emailtemplateread = fs.readFileSync(emailTemplatepath, "utf8");
+
+      // Set token and logo value in ejs file
+      const data = {
+        passwordresetlink: `http://localhost:4300/resetpassword/${userfind.id}/${setusertoken.verifytoken}`,
+        logo: "https://cdn-icons-png.flaticon.com/128/732/732200.png",
+      };
+
+      // set dynamic datavalue in ejs
+      const renderTemplate = ejs.render(emailtemplateread, data);
+
+      if (setusertoken) {
+        const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Sending Email For password Reset",
+          html: renderTemplate,
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.log("error", error);
+            res.status(400).json({ error: "email not send" });
+          } else {
+            console.log("email sent", info.response);
+            res.status(200).json({ message: "Email sent Sucessfully" });
+          }
         });
-
-        const setusertoken = await userDB.findByIdAndUpdate({_id:userfind._id},{verifytoken:token},{new:true});
-        console.log("setusertoken" ,setusertoken)
-    }else{
-        res.status(400).json({error: "this user is not exist"})
+      }
+    } else {
+      res.status(400).json({ error: "this user is not exist" });
     }
   } catch (error) {
     res.status(400).json(error);
   }
 };
+
+// urcx pqwq gzag llqv
