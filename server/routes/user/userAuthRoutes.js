@@ -5,7 +5,7 @@ const { userRegister ,userLogin} = require("../../controllers/user/userControlle
 
 
 router.post("/register" , userUpload.single("userprofile") , userRegister)
-router.post("login" , userLogin)
+router.post("/login" , userLogin)
 
 
 

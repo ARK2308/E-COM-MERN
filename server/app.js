@@ -27,8 +27,8 @@ const productroutes = require("./routes/products/productroutes.js");
 app.use("/product/api", productroutes);
 
 // user routes
-const userAuthroutes = require("./routes/user/userAuthRoutes.js");
-app.use("/userauth/api", userAuthroutes);
+const userAuthRoutes = require("./routes/user/userAuthRoutes.js");
+app.use("/userAuth/api", userAuthRoutes);
 
 // start server
 
