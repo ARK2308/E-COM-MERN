@@ -68,3 +68,13 @@ exports.userLogin = async (req , res)=>{
         
     }
 }
+
+exports.userVerify = async (req , res) => {
+    try {
+        const verifyUser = await userDB.findOne({_id:req.userId});
+        res.status(200).json(verifyUser)
+    } catch (error) {
+        res.status(400).json(error)
+        
+    }
+}
