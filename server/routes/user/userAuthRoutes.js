@@ -14,7 +14,7 @@ router.post("/forgotpassword", forgotPassword);
 // user verify for forgotpassword
 router.get("/forgotpassword/:id/:token", forgotPasswordVerify);
 
-router.put("/resetpassword/:id/:token",userController.resetPassword);
+router.put("/resetpassword/:id/:token", resetPassword);
 
 
 

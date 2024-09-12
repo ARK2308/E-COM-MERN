@@ -12,6 +12,6 @@ router.post("/addtocart/:id",userauthenticate, addToCart);
 
 
 
-module.exports = router();
+module.exports = router;
 
 
