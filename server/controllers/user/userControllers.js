@@ -202,7 +202,7 @@ exports.resetPassword = async (req, res)=>{
         }else{
             res.status(400).json({error:"your session time out please generate newlink"})
         }
-        console.log("hello")
+       
     } catch (error) {
         res.status(400).json(error)
     }
