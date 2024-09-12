@@ -30,6 +30,11 @@ app.use("/product/api", productroutes);
 const userAuthRoutes = require("./routes/user/userAuthRoutes.js");
 app.use("/userAuth/api", userAuthRoutes);
 
+// carts routes
+const cartsRoutes = require("./routes/carts/cartsRoutes");
+app.use("/carts/api",cartsRoutes);
+
+
 // start server
 
 app.listen(port, () => {
