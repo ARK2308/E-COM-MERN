@@ -73,7 +73,7 @@ exports.getCartsValue = async (req, res) => {
 };
 
 // removeSingleiteam
-exports.removeSingleiteam = async (req, res) => {
+exports.removeSingleitem = async (req, res) => {
   const { id } = req.params;
   try {
     const productfind = await productsdb.findOne({ _id: id });
@@ -117,3 +117,43 @@ exports.removeSingleiteam = async (req, res) => {
     res.status(400).json(error);
   }
 };
+
+
+// remove all item
+exports.removeAllitem = async (req , res)=>{
+    const { id } = req.params;
+    try {
+
+        const productfind = await productsdb.findOne({ _id: id });
+
+        const carts = await cartsdb.findOne({ userid: req.userId, productid: productfind._id });
+
+        if (!carts) {
+            res.status(400).json({ error: "cart item not found" });
+        }
+
+        const deleteCartItem = await cartsdb.findByIdAndDelete({ _id: carts._id });
+
+
+        // prodcut increment
+        productfind.quantity = productfind.quantity + carts.quantity
+        await productfind.save();
+
+
+        res.status(200).json({ message: "YOur Iteam sucessfully remove in your cart", deleteCartItem });
+    } catch (error) {
+        res.status(400).json(error)
+
+    }
+}
+
+
+exports.deleteCartsData = async (req , res)=>{
+    try {
+        const DeleteCarts = await cartsdb.deleteMany({ userid: req.userId });
+        res.status(200).json(DeleteCarts);
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
