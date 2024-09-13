@@ -1,6 +1,6 @@
 const express = require("express");
 const adminauthenticate = require("../../Middleware/admin/adminauthenticate");
-const {addCategory , getCategory , addProduct ,getAllProducts ,getSingleProduct ,getLatestProducts ,deleteProducts ,productReview} = require("../../controllers/product/productController")
+const {addCategory , getCategory , addProduct ,getAllProducts ,getSingleProduct ,getLatestProducts ,deleteProducts ,productReview ,getProductReview ,deleteProductReview} = require("../../controllers/product/productController")
 const productupload = require("../../Multerconfig/products/productStorageConfig");
 const router = new express.Router();
 const userAuthenticate = require("../../Middleware/user/userauthenticate")
@@ -21,7 +21,8 @@ router.get("/getlatestproducts", getLatestProducts);
 
 // products review api
 router.post("/productreview/:productid", userAuthenticate, productReview);
-
+router.get("/getProductreview/:productid", getProductReview);
+router.delete("/productreviewdelete/:reviewid",userAuthenticate, deleteProductReview);
 
 
  

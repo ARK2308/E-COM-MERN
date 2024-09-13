@@ -1,6 +1,7 @@
 const categorydb = require("../../models/product/productCategoryModel");
 const cloudinary = require("../../Cloudinary/cloudinary");
 const productsdb = require("../../models/product/productModel");
+const productreviewdb = require("../../models/product/productreviewModel")
 
 exports.addCategory = async (req, res) => {
   const { categoryname, description } = req.body;
@@ -170,3 +171,26 @@ exports.productReview = async (req , res)=>{
       res.status(400).json(error);
   }
 }
+
+// getproductreview
+exports.getProductReview = async (req , res)=>{
+  const {productid} = req.params;
+  try {
+      const getreview = await productreviewdb.find({productid:productid});
+      res.status(200).json(getreview)
+  } catch (error) {
+      res.status(400).json(error);
+  }
+}
+
+// deleteProductReview
+exports.deleteProductReview = async(req, res)=>{
+  const {reviewid} = req.params;
+  try {
+      const reviewDelete = await productreviewdb.findByIdAndDelete({_id:reviewid});
+      res.status(200).json(reviewDelete)
+  } catch (error) {
+      res.status(400).json(error);
+  }
+}
+
