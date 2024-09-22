@@ -65,6 +65,16 @@ exports.getCartsValue = async (req, res) => {
           as: "productDetails",
         },
       },
+      ///getting first data from the product details array
+      {
+        $project:{
+_id:1,
+userid:1,
+productid:1,
+quantity:1,
+productDetails:{$arrayElemAt:['$productDetails' , 0]}///extract first element of the product
+        }
+      }
     ]);
     res.status(200).json(getCarts);
   } catch (error) {

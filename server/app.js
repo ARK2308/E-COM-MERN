@@ -34,6 +34,14 @@ app.use("/userAuth/api", userAuthRoutes);
 const cartsRoutes = require("./routes/carts/cartsRoutes");
 app.use("/carts/api",cartsRoutes);
 
+// payment routes
+const paymentroutes = require("./routes/payment/PaymentRoutes");
+app.use("/checkout/api", paymentroutes);
+
+
+// order routes 
+const orderroutes = require("./routes/order/orderRoutes");
+app.use("/order/api", orderroutes);
 
 // start server
 

@@ -7,6 +7,7 @@ const path = require("path");
 const fs = require("fs");
 const ejs = require("ejs");
 const { transporter } = require("../../helper");
+const usercontactDB = require("../../models/user/userContactModel");
 
 exports.userRegister = async (req, res) => {
   const { firstname, lastname, email, password, confirmpassword } = req.body;
@@ -115,7 +116,7 @@ exports.forgotPassword = async (req, res) => {
     if (userfind) {
       // token generate for password change
       const token = jwt.sign({ _id: userfind._id }, SECRET_KEY, {
-        expiresIn: "180s",
+        expiresIn: "300s",
       });
 
       const setusertoken = await userDB.findByIdAndUpdate(
@@ -207,3 +208,67 @@ exports.resetPassword = async (req, res)=>{
         res.status(400).json(error)
     }
 };
+
+
+// getAlluse
+exports.getAlluser = async (req ,res)=>{
+  const page = req.query.page || 1;
+  const ITEM_PER_PAGE = 4;
+  try {
+
+      const skip = (page - 1) * ITEM_PER_PAGE;
+
+      const count = await userDB.countDocuments();
+
+      const pageCount = Math.ceil(count/ITEM_PER_PAGE);
+
+      const usersdata = await userDB.find()
+      .limit(ITEM_PER_PAGE)
+      .skip(skip)
+      .sort({_id:-1});
+
+      res.status(200).json({
+          Pagination:{
+              count,pageCount
+          },
+          usersdata
+      });
+      
+  } catch (error) {
+      res.status(400).json(error)
+  }
+}
+
+// userDelete
+exports.userDelete = async (req , res)=>{
+  const {userid} = req.params;
+  try {
+      const deleteuser = await userDB.findByIdAndDelete({_id:userid});
+      res.status(200).json(deleteuser);
+  } catch (error) {
+      res.status(400).json(error)
+  }
+}
+
+
+// userContact
+
+exports.userContact = async(req,res)=>{
+  const {name,email,message} = req.body;
+
+  if(!name || !email || !message){
+      res.status(400).json({error:"all fields are required"})
+  }
+
+  try {
+      const usermessageData = new usercontactDB({
+          name,email,message
+      });
+
+
+      await usermessageData.save();
+      res.status(200).json(usermessageData)
+  } catch (error) {
+      res.status(400).json(error)
+  }
+}
