@@ -90,7 +90,7 @@ exports.AdminVerify = async (req, res) => {
     }
     return res.status(200).json(verifyadmin);
 } catch (error) {
-    // res.status(500).json({error:"Invalid Credentials"});
+    res.status(500).json({error:"Invalid Credentials"});
 }
 };
 
