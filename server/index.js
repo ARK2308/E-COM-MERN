@@ -6,7 +6,7 @@ const port = 4300;
 
 // database connection code
 
-const db = require("./db/connect");
+const db = require("./db/connect.js");
 db.connect();
 
 // routes created to show this on sever
@@ -31,16 +31,16 @@ const userAuthRoutes = require("./routes/user/userAuthRoutes.js");
 app.use("/userAuth/api", userAuthRoutes);
 
 // carts routes
-const cartsRoutes = require("./routes/carts/cartsRoutes");
+const cartsRoutes = require("./routes/carts/cartsRoutes.js");
 app.use("/carts/api",cartsRoutes);
 
 // payment routes
-const paymentroutes = require("./routes/payment/PaymentRoutes");
+const paymentroutes = require("./routes/payment/PaymentRoutes.js");
 app.use("/checkout/api", paymentroutes);
 
 
 // order routes 
-const orderroutes = require("./routes/order/orderRoutes");
+const orderroutes = require("./routes/order/orderRoutes.js");
 app.use("/order/api", orderroutes);
 
 // start server
